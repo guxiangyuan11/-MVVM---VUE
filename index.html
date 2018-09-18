@@ -6,13 +6,23 @@
 </head>
 <body>
 <div id="app">
+    <div>{{name}}</div>
+    <div>{{age}}</div>
+    <div>{{eat.a}}</div>
+    <div>{{eat.b}}</div>
 </div>
+<script src="js/compile.js"></script>
 <script src="js/dataProxy.js"></script>
 <script>
     var vm = new MvvmVue({
-        $el:'#app',
+        el:'#app',
         data: {
-            name: 'asd'
+            name: 'asd',
+            age: 12,
+            eat:{
+                a: 1,
+                b: 2
+            }
         }
     })
     console.log(vm)

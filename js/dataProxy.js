@@ -7,6 +7,8 @@ function MvvmVue(options) {
         // 实现属性代理
         _self._proxy(key)
     })
+    // 编译HTML模板
+    new Compile(_self._options.el || document.body, _self)
 }
 MvvmVue.prototype._proxy = function (key) {
     var _self = this // 保存this对象
