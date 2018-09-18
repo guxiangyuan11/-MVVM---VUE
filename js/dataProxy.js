@@ -1,6 +1,6 @@
 function MvvmVue(options) {
-    this._options = options // 得到传过来的配置
-    var data = this._data = this._options.data // 得到配置里面的data对象
+    this.$options = options // 得到传过来的配置
+    var data = this._data = this.$options.data // 得到配置里面的data对象
     var _self = this // 保存this对象
     // 遍历属性对象JSON
     Object.keys(data).forEach(function (key) {
@@ -8,7 +8,7 @@ function MvvmVue(options) {
         _self._proxy(key)
     })
     // 编译HTML模板
-    new Compile(_self._options.el || document.body, _self)
+    new Compile(_self.$options.el || document.body, _self)
 }
 MvvmVue.prototype._proxy = function (key) {
     var _self = this // 保存this对象

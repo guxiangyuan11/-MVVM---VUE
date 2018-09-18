@@ -36,9 +36,11 @@ Compile.prototype.compileFrag=function (el){
         var reg = /\{\{(.*)\}\}/
         // 判断是否是元素节点
         if(_self.isElement(node)){
-
+            // 查看绑定的指令
+            _self.compileV(node)
         } else if(_self.isText(node) && reg.test(node.textContent)){ // 判断是否是文本且节点的内容能否匹配上正则
-            node.textContent = _self.getDataValue(_self._vm, RegExp.$1) // 得到相对应的数据
+            // 编译大括号模板
+            _self.compileText(node, RegExp.$1)
         }
         // 如果子节点还有子节点
         if (node.childNodes && node.childNodes.length) {
@@ -48,26 +50,61 @@ Compile.prototype.compileFrag=function (el){
     })
 }
 
-// 判断传过来的是否是node节点
-Compile.prototype.isElement=function (node){
-    return node.nodeType == 1 // 如果是1的话就是标签
+// 对指令进行编译
+Compile.prototype.compileV = function (node){
+    var _self = this
+    var vm = this._vm
+    var attrs = node.attributes // 得到该node的所有的属性
+    console.log(attrs)
+    // 遍历该属性数组
+    Array.prototype.slice.apply(attrs).forEach(function (attr) {
+        // 得到指令名字符串 如:v-on:click
+        var attrName = attr.name
+        // 判断是否有指令属性
+        if(attrName.indexOf('v-') === 0){
+            var attrValue = attr.value // 得到属性的值
+            // 在这里做安全判断
+            if(attrValue && vm.$options.methodes && vm.$options.methodes[attrValue]){
+                // 进行函数绑定
+                _self.handelFn(node, attrName, vm.$options.methodes[attrValue])
+            }
+            // 最后移除该指令在node上
+            node.removeAttribute(attrName)
+        }
+    })
+
 }
-// 判断传过来的是否是文本
-Compile.prototype.isText=function (node){
-    return node.nodeType == 3; // 如果是3的话就是文本
+
+// 判断传过来的是否是node节点
+Compile.prototype.isElement = function (node){
+    return node.nodeType == 1 // 如果是1的话就是标签
 }
 
 // 判断传过来的是否是文本
-Compile.prototype.isText=function (node){
-    return node.nodeType == 3; // 如果是3的话就是文本
+Compile.prototype.isText = function (node){
+    return node.nodeType == 3 // 如果是3的话就是文本
+}
+
+// 对文本节点进行赋值
+Compile.prototype.compileText = function (node, regStr){
+    // 得到相对应的数据，然后进行内容填充
+    node.textContent = this.getDataValue(this._vm, regStr)
 }
 
 // 得到{{}}中指定的数据，从实例中得到
-Compile.prototype.getDataValue=function (vm, exp){
-    var val = vm._data;
-    exp = exp.split('.');
-    exp.forEach(function (k) {
-        val = val[k];
-    });
-    return val;
+Compile.prototype.getDataValue =  function (vm, regStr){
+    var val = vm._data
+    regStr = regStr.split('.')
+    regStr.forEach(function (k) {
+        val = val[k]
+    })
+    return val
+}
+
+// 进行回调绑定
+Compile.prototype.handelFn = function (node, fnType, fn){
+    var fnType = fnType.split(':')[1]
+    // 这里进行函数绑定
+    // 注意这里需要对fn进行bind绑定并且把this指向MvvmVue实例对象，否则该fn的this指向的是事件绑定者
+    node.addEventListener(fnType, fn.bind(this._vm) ,false)
 }

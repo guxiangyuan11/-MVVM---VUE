@@ -9,7 +9,8 @@
     <div>{{name}}</div>
     <div>{{age}}</div>
     <div>{{eat.a}}</div>
-    <div>{{eat.b}}</div>
+    <div>{{eataab}}</div>
+    <button style="width: 100px;height: 30px" v-on:click="show">点我</button>
 </div>
 <script src="js/compile.js"></script>
 <script src="js/dataProxy.js"></script>
@@ -22,6 +23,11 @@
             eat:{
                 a: 1,
                 b: 2
+            }
+        },
+        methodes:{
+            show: function () {
+                alert(this.eat.a)
             }
         }
     })
