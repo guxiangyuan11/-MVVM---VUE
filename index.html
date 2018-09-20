@@ -3,6 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .demo{
+            width: 50px;
+            height: 50px;
+            color: red;
+        }
+        .test{
+            background-color: yellow;
+        }
+    </style>
 </head>
 <body>
 <div id="app">
@@ -10,7 +20,10 @@
     <div>{{age}}</div>
     <div>{{eat.a}}</div>
     <div>{{eataab}}</div>
-    <button style="width: 100px;height: 30px" v-on:click="show">点我</button>
+    <div data-as="asd" v-html="htmlT"></div>
+    <div data-as="asd2" v-text="textT"></div>
+    <div class="demo" v-class="classT">哈哈</div>
+    <button style="width: 100px;height: 30px" @click="show">点我</button>
 </div>
 <script src="js/compile.js"></script>
 <script src="js/dataProxy.js"></script>
@@ -23,7 +36,10 @@
             eat:{
                 a: 1,
                 b: 2
-            }
+            },
+            htmlT:'<a>haha</a>',
+            textT: 'demodemodemo',
+            classT: 'test'
         },
         methodes:{
             show: function () {
@@ -31,8 +47,6 @@
             }
         }
     })
-    console.log(vm)
-    console.log(vm.name)
 </script>
 </body>
 </html>

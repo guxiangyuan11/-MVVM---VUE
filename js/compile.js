@@ -55,19 +55,28 @@ Compile.prototype.compileV = function (node){
     var _self = this
     var vm = this._vm
     var attrs = node.attributes // 得到该node的所有的属性
-    console.log(attrs)
     // 遍历该属性数组
     Array.prototype.slice.apply(attrs).forEach(function (attr) {
         // 得到指令名字符串 如:v-on:click
         var attrName = attr.name
         // 判断是否有指令属性
-        if(attrName.indexOf('v-') === 0){
-            var attrValue = attr.value // 得到属性的值
-            // 在这里做安全判断
-            if(attrValue && vm.$options.methodes && vm.$options.methodes[attrValue]){
-                // 进行函数绑定
-                _self.handelFn(node, attrName, vm.$options.methodes[attrValue])
+        if(attrName.indexOf('v-') === 0 || attrName.indexOf('@') === 0 ){
+            var attrValue = attr.value.trim() // 得到属性的值
+            // 由于事件绑定的处理和其他的指定绑定处理不一样所以分开处理
+            if(attrName.indexOf('on')===0 || attrName.indexOf('@') === 0){
+                // 事件绑定
+                // 在这里做安全判断
+                if(attrValue && vm.$options.methodes && vm.$options.methodes[attrValue]){
+                    // 进行函数绑定
+                    _self.handelFn(node, attrName, vm.$options.methodes[attrValue])
+                }
+            } else {
+                // 处理其他指令
+                // 得到对应的指令名 如： html,text
+                var name = attrName.substring(2)
+                _self.vUtil[name] && _self.vUtil[name](vm, node, attrValue)
             }
+
             // 最后移除该指令在node上
             node.removeAttribute(attrName)
         }
@@ -88,23 +97,76 @@ Compile.prototype.isText = function (node){
 // 对文本节点进行赋值
 Compile.prototype.compileText = function (node, regStr){
     // 得到相对应的数据，然后进行内容填充
-    node.textContent = this.getDataValue(this._vm, regStr)
+    node.textContent = this.vUtil.getDataValue(this._vm, regStr)
 }
 
-// 得到{{}}中指定的数据，从实例中得到
-Compile.prototype.getDataValue =  function (vm, regStr){
-    var val = vm._data
-    regStr = regStr.split('.')
-    regStr.forEach(function (k) {
-        val = val[k]
-    })
-    return val
-}
+
 
 // 进行回调绑定
 Compile.prototype.handelFn = function (node, fnType, fn){
-    var fnType = fnType.split(':')[1]
+    if(fnType.indexOf('v-') === 0 ){
+        var fnType = fnType.split(':')[1]
+    } else if( fnType.indexOf('@') === 0 ){
+        var fnType = fnType.split('@')[1]
+    }
     // 这里进行函数绑定
     // 注意这里需要对fn进行bind绑定并且把this指向MvvmVue实例对象，否则该fn的this指向的是事件绑定者
     node.addEventListener(fnType, fn.bind(this._vm) ,false)
 }
+
+Compile.prototype.vUtil = {
+    // v-text
+    text: function (vm, node, value) {
+        this.deal(vm, node, value, 'text')
+    },
+    // v-html
+    html:function (vm, node, value) {
+        this.deal(vm, node, value, 'html')
+    },
+    // v-class
+    class: function (vm, node, value) {
+        this.deal(vm, node, value, 'class')
+    },
+    model: function () {
+
+    },
+    // 这个函数统一进行指令的处理
+    deal: function (vm, node, value, type) {
+        // 这里需要处理不同的指令
+        this.dealTypeFn[type+'Updata'] && this.dealTypeFn[type+'Updata'](node, this.getDataValue(vm,value))
+    },
+    dealTypeFn:{
+        textUpdata: function (node,value) {
+            node.textContent = value ? value  : ''
+        },
+        htmlUpdata: function (node, value) {
+            node.innerHTML = value ? value : ''
+        },
+        classUpdata: function (node, value) {
+            var nodeClass = node.className
+            node.className = nodeClass? nodeClass+ ' ' + value:value;
+        }
+    },
+    // 得到{{}}中指定的数据，从实例中得到
+    getDataValue: function (vm, regStr){
+        var val = vm._data
+        regStr = regStr.split('.')
+        regStr.forEach(function (k) {
+            val = val[k]
+        })
+        return val
+    }
+}
+Compile.prototype.dealType = {
+    textUpdata: function (node,value) {
+        node.textContent = value ? '' : value
+    },
+    htmlUpdata: function (node, value) {
+        node.innerHTML = value ? '' : value
+    },
+    classUpdata: function (node, value) {
+        var nodeClass = node.className
+        node.className = nodeClass + ' ' + value;
+    }
+}
+
