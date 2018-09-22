@@ -22,10 +22,14 @@
     <div>{{eataab}}</div>
     <div data-as="asd" v-html="htmlT"></div>
     <div data-as="asd2" v-text="textT"></div>
+    <div data-as="asd2" v-text="name"></div>
     <div class="demo" v-class="classT">哈哈</div>
     <button style="width: 100px;height: 30px" @click="show">点我</button>
+    <button style="width: 100px;height: 30px" @click="update1">更新</button>
 </div>
 <script src="js/compile.js"></script>
+<script src="js/watcher.js"></script>
+<script src="js/observer.js"></script>
 <script src="js/dataProxy.js"></script>
 <script>
     var vm = new MvvmVue({
@@ -44,6 +48,10 @@
         methodes:{
             show: function () {
                 alert(this.eat.a)
+            },
+            update1: function () {
+                console.log("asd")
+                this.name = "1111"
             }
         }
     })

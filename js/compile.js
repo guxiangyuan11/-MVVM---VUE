@@ -41,6 +41,7 @@ Compile.prototype.compileFrag=function (el){
         } else if(_self.isText(node) && reg.test(node.textContent)){ // 判断是否是文本且节点的内容能否匹配上正则
             // 编译大括号模板
             _self.compileText(node, RegExp.$1)
+
         }
         // 如果子节点还有子节点
         if (node.childNodes && node.childNodes.length) {
@@ -97,7 +98,8 @@ Compile.prototype.isText = function (node){
 // 对文本节点进行赋值
 Compile.prototype.compileText = function (node, regStr){
     // 得到相对应的数据，然后进行内容填充
-    node.textContent = this.vUtil.getDataValue(this._vm, regStr)
+    this.vUtil.text(this._vm, node, regStr)
+    // node.textContent = this.vUtil.getDataValue(this._vm, regStr)
 }
 
 
@@ -115,7 +117,7 @@ Compile.prototype.handelFn = function (node, fnType, fn){
 }
 
 Compile.prototype.vUtil = {
-    // v-text
+    // v-text/ {{}}
     text: function (vm, node, value) {
         this.deal(vm, node, value, 'text')
     },
@@ -132,8 +134,14 @@ Compile.prototype.vUtil = {
     },
     // 这个函数统一进行指令的处理
     deal: function (vm, node, value, type) {
+        var _self = this;
         // 这里需要处理不同的指令
         this.dealTypeFn[type+'Updata'] && this.dealTypeFn[type+'Updata'](node, this.getDataValue(vm,value))
+
+        // 进行数据监听，如果有改变就更新视图
+        new Watcher(value, vm, function (val, oldVal) {
+            _self.dealTypeFn[type+'Updata'] && _self.dealTypeFn[type+'Updata'](node, val, oldVal)
+        })
     },
     dealTypeFn:{
         textUpdata: function (node,value) {
