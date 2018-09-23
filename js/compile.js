@@ -129,8 +129,22 @@ Compile.prototype.vUtil = {
     class: function (vm, node, value) {
         this.deal(vm, node, value, 'class')
     },
-    model: function () {
-
+    // v-class
+    model: function (vm, node, value) {
+        this.deal(vm, node, value, 'model');
+        var _self = this,
+            val = this.getDataValue(vm, value);
+        if(value){
+            node.value = val
+        }
+        node.addEventListener('input', function (e) {
+            var newValue = e.target.value;
+            if (val === newValue) {
+                return;
+            }
+            _self._setDataValue(vm, value, newValue);
+            val = newValue;
+        });
     },
     // 这个函数统一进行指令的处理
     deal: function (vm, node, value, type) {
@@ -163,6 +177,18 @@ Compile.prototype.vUtil = {
             val = val[k]
         })
         return val
+    },
+    _setDataValue:function (vm, exp, value) {
+        var val = vm._data
+        exp = exp.split('.')
+        exp.forEach(function (k, i) {
+            // 非最后一个key，更新val的值
+            if (i < exp.length - 1) {
+                val = val[k]
+            } else {
+                val[k] = value
+            }
+        });
     }
 }
 Compile.prototype.dealType = {

@@ -22,10 +22,12 @@
     <div>{{eataab}}</div>
     <div data-as="asd" v-html="htmlT"></div>
     <div data-as="asd2" v-text="textT"></div>
-    <div data-as="asd2" v-text="name"></div>
+    <div data-as="asd2" v-text="msg"></div>
     <div class="demo" v-class="classT">哈哈</div>
     <button style="width: 100px;height: 30px" @click="show">点我</button>
-    <button style="width: 100px;height: 30px" @click="update1">更新</button>
+    <button style="width: 100px;height: 30px" @click="update">更新</button>
+    <input type="text" v-model="msg">
+    <div>{{msg}}</div>
 </div>
 <script src="js/compile.js"></script>
 <script src="js/watcher.js"></script>
@@ -43,13 +45,14 @@
             },
             htmlT:'<a>haha</a>',
             textT: 'demodemodemo',
-            classT: 'test'
+            classT: 'test',
+            msg: '12'
         },
         methodes:{
             show: function () {
                 alert(this.eat.a)
             },
-            update1: function () {
+            update: function () {
                 console.log("asd")
                 this.name = "1111"
             }
