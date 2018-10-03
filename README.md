@@ -19,6 +19,7 @@
 
 将实现的一些思路编写成了文章：
 
->[前端MVVM模式从理论到实战 （一）](https://www.jianshu.com/p/e2ac3260c767)
+[前端MVVM模式从理论到实战 （一）](https://www.jianshu.com/p/e2ac3260c767)
+
 [前端MVVM模式从理论到实战 （二）](https://www.jianshu.com/p/e2ac3260c767)
 
