@@ -22,5 +22,7 @@
 [前端MVVM模式从理论到实战 （一）](https://www.jianshu.com/p/e2ac3260c767)
 
 [前端MVVM模式从理论到实战 （二）](https://www.jianshu.com/p/7088249276de)
+
+[前端MVVM模式从理论到实战 （三）](https://www.jianshu.com/p/ca9404cf2f9b)
 未完待续...
 
