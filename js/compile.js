@@ -16,11 +16,11 @@ function Compile(el, vm) {
 }
 
 
-// 判断传过来的是否是node节点
+// 创建fragment片段
 Compile.prototype.getFragment=function (el){
     var fragment = document.createDocumentFragment()
     var child
-    // 拷贝节点到fragment
+    // 添加节点到fragment
     while (child=el.firstChild) {
         fragment.appendChild(child)
     }
@@ -64,7 +64,7 @@ Compile.prototype.compileV = function (node){
         if(attrName.indexOf('v-') === 0 || attrName.indexOf('@') === 0 ){
             var attrValue = attr.value.trim() // 得到属性的值
             // 由于事件绑定的处理和其他的指定绑定处理不一样所以分开处理
-            if(attrName.indexOf('on')===0 || attrName.indexOf('@') === 0){
+            if(attrName.substring(2).indexOf('on')===0 || attrName.indexOf('@') === 0){
                 // 事件绑定
                 // 在这里做安全判断
                 if(attrValue && vm.$options.methodes && vm.$options.methodes[attrValue]){
@@ -112,7 +112,7 @@ Compile.prototype.handelFn = function (node, fnType, fn){
         var fnType = fnType.split('@')[1]
     }
     // 这里进行函数绑定
-    // 注意这里需要对fn进行bind绑定并且把this指向MvvmVue实例对象，否则该fn的this指向的是事件绑定者
+    // 注意这里需要对fn进行bind修改this指向，并且把this指向MvvmVue实例对象，否则该fn的this指向的是事件绑定者
     node.addEventListener(fnType, fn.bind(this._vm) ,false)
 }
 
@@ -189,18 +189,6 @@ Compile.prototype.vUtil = {
                 val[k] = value
             }
         });
-    }
-}
-Compile.prototype.dealType = {
-    textUpdata: function (node,value) {
-        node.textContent = value ? '' : value
-    },
-    htmlUpdata: function (node, value) {
-        node.innerHTML = value ? '' : value
-    },
-    classUpdata: function (node, value) {
-        var nodeClass = node.className
-        node.className = nodeClass + ' ' + value;
     }
 }
 
