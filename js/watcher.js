@@ -1,6 +1,6 @@
 function Watcher(value, vm, cb) {
     this.exp = value // 记录传过来的value对象
-    this.vm = vm // mvvm实例对象
+    this.vm = vm // 实例对象
     this.cb = cb // 函数回调
     this.depIds = {}
     this.value = this.get()  // 得到当前渲染的数据值
@@ -25,7 +25,7 @@ Watcher.prototype = {
             return
         }
         // 调用更新视图,这里需要把this指向改为mvvm对象实例
-        this.cb.call(this.vm ,newValue, oldValue)
+        this.cb.call(this.vm ,newValue)
         this.value = newValue
     },
     get(){

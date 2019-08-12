@@ -67,9 +67,9 @@ Compile.prototype.compileV = function (node){
             if(attrName.substring(2).indexOf('on')===0 || attrName.indexOf('@') === 0){
                 // 事件绑定
                 // 在这里做安全判断
-                if(attrValue && vm.$options.methodes && vm.$options.methodes[attrValue]){
+                if(attrValue && vm.$options.methods && vm.$options.methods[attrValue]){
                     // 进行函数绑定
-                    _self.handelFn(node, attrName, vm.$options.methodes[attrValue])
+                    _self.handelFn(node, attrName, vm.$options.methods[attrValue])
                 }
             } else {
                 // 处理其他指令
@@ -153,8 +153,8 @@ Compile.prototype.vUtil = {
         this.dealTypeFn[type+'Updata'] && this.dealTypeFn[type+'Updata'](node, this.getDataValue(vm,value))
 
         // 进行数据监听，如果有改变就更新视图
-        new Watcher(value, vm, function (val, oldVal) {
-            _self.dealTypeFn[type+'Updata'] && _self.dealTypeFn[type+'Updata'](node, val, oldVal)
+        new Watcher(value, vm, function (val) {
+            _self.dealTypeFn[type+'Updata'] && _self.dealTypeFn[type+'Updata'](node, val)
         })
     },
     dealTypeFn:{
