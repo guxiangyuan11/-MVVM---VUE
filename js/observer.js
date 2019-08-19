@@ -56,6 +56,7 @@ function Dep() {
     this.id = countId++
     this.watchs = []
 }
+Dep.target = null
 Dep.prototype = {
     // 添加watcher存储到dep上
     addWatchs(watch) {
@@ -68,7 +69,7 @@ Dep.prototype = {
         })
     }
 }
-Dep.target = null
+
 // 检查数据是否符合监测对象
 function observe (data){
     // value必须是对象, 因为监视的是对象内部的属性

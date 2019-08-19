@@ -1,5 +1,5 @@
-function Watcher(value, vm, cb) {
-    this.exp = value // 记录传过来的value对象
+function Watcher(exp, vm, cb) {
+    this.exp = exp // 记录传过来的表达式
     this.vm = vm // 实例对象
     this.cb = cb // 函数回调
     this.depIds = {}

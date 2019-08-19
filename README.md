@@ -19,10 +19,12 @@
 
 将实现的一些思路编写成了文章：
 
-> * [前端MVVM模式从理论到实战 （一）](https://www.jianshu.com/p/e2ac3260c767)
-> * [前端MVVM模式从理论到实战 （二）](https://www.jianshu.com/p/7088249276de)
-> * [前端MVVM模式从理论到实战 （三）](https://www.jianshu.com/p/ca9404cf2f9b) 
-> * [前端MVVM模式从理论到实战 （四）](https://www.jianshu.com/p/56f859da7a7d) 
-> * [前端MVVM模式从理论到实战 （五）](https://www.jianshu.com/p/160c989e73c1) 
-> * [前端MVVM模式从理论到实战 （六）](https://www.jianshu.com/p/faff382af115) 待续。。。
+> * [前端MVVM理论-MVC和MVP](https://www.jianshu.com/p/e2ac3260c767)
+> * [前端MVVM理论-MVVM](https://www.jianshu.com/p/7088249276de)
+> * [前端MVVM实战-常用的几个方法和属性](https://www.jianshu.com/p/ca9404cf2f9b)
+> * [前端MVVM实战-数据代理](https://www.jianshu.com/p/56f859da7a7d)
+> * [前端MVVM实战-模板解析之双括号解析](https://www.jianshu.com/p/160c989e73c1)
+> * [前端MVVM实战-模板解析之事件指令和一般指令](https://www.jianshu.com/p/faff382af115)
+> * [前端MVVM实战-数据绑定(一)](https://www.jianshu.com/p/3bf0b4d76611)
+> * [前端MVVM实战-数据绑定(二)](https://www.jianshu.com/p/21592a132f67)
 

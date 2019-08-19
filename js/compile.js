@@ -131,7 +131,6 @@ Compile.prototype.vUtil = {
     },
     // v-class
     model: function (vm, node, value) {
-        this.deal(vm, node, value, 'model');
         var _self = this,
             val = this.getDataValue(vm, value);
         if(value){
@@ -152,7 +151,7 @@ Compile.prototype.vUtil = {
         // 这里需要处理不同的指令
         this.dealTypeFn[type+'Updata'] && this.dealTypeFn[type+'Updata'](node, this.getDataValue(vm,value))
 
-        // 进行数据监听，如果有改变就更新视图
+        // 进行数据监听
         new Watcher(value, vm, function (val) {
             _self.dealTypeFn[type+'Updata'] && _self.dealTypeFn[type+'Updata'](node, val)
         })
